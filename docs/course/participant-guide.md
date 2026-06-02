@@ -30,7 +30,8 @@ cd sample-quarkus-app
 
 ```bash
 java -version
-# OpenJDK 17 以上が必要
+# JDK 17 または 21 (LTS) を推奨。Quarkus 3.15 は 17/21 で検証済み。
+# 非常に新しい JDK (24+) は未検証 — 当日は 17 か 21 を使うこと。
 ```
 
 入っていなければ [Adoptium](https://adoptium.net/) などからインストール。

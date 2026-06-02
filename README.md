@@ -23,7 +23,7 @@ Claude Code 教育 第 2 回「**Quarkus + Kotlin で学ぶ AI Harness Engineeri
 ### クイックスタート
 
 ```bash
-# JDK 17 以上が必要
+# JDK 17 または 21 (LTS) 推奨。build.gradle.kts は Java 17 ターゲット
 java -version
 
 # ビルド

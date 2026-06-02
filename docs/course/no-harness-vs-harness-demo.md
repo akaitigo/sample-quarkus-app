@@ -230,6 +230,13 @@ claude
 - 「これでも良いが、**チームで毎回これを期待できるか?**」と問いかける
 - 別の受講者に同じプロンプトを打ってもらい、結果のバラつきを見せる (時間があれば)
 
+### Round 2 で正常系・404 が 400 になる（単一プロパティ DTO の Jackson 罠）
+
+`PriceUpdateRequest(val price: Int)` は単一プロパティ data class のため `jackson-module-kotlin` が `{"price":150}` を受け付けず 400 になる既知の罠。**むしろ絶好の教材**: テスト（Resource 200/404）がこのミスを機械的に検出する＝検証軸が効いている実例として見せられる。
+- 講師の選択肢A（安全）: `quarkus-kotlin-feature` Skill の DTO 例は `@JsonCreator(PROPERTIES)` 込みなので、skill に従えば一発で通る。
+- 講師の選択肢B（教材化）: あえて素の単一プロパティ DTO で 400 を出し、テストが落ちる→ Claude が `@JsonCreator` で自己修正する流れを見せる（時間に余裕がある時のみ。デモ手順書冒頭のフォールバック方針に従う）。
+- 詳細: `docs/ai/architecture.md`「既知の落とし穴」。
+
 ### Round 2 で Hook が遅くてデモが止まる
 
 - 事前に `post-tool-use-format.sh` が高速 (1 秒以内) であることを確認

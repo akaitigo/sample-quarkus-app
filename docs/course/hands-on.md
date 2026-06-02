@@ -26,6 +26,8 @@
 6. `./gradlew test` が緑
 7. アーキテクチャ規約に従う (Resource にロジック禁止、Service に業務ロジック)
 
+> ⚠️ **既知の落とし穴**: `PriceUpdateRequest(val price: Int)` のような **単一プロパティの data class** は `jackson-module-kotlin` が委譲コンストラクタと誤解し、`{"price":150}` が 400 になります（正常系・404 テストが落ちる）。`@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)` + `@JsonProperty("price")` で回避。詳細は `docs/ai/architecture.md`「既知の落とし穴」。`quarkus-kotlin-feature` Skill の DTO 例はこの対処込みです。
+
 ---
 
 ## 2 つのパスでやる

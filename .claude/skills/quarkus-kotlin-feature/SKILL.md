@@ -48,7 +48,16 @@ Example for "update product price" — match the existing `create()` flow (see `
 
 ```kotlin
 // dto/PriceUpdateRequest.kt
-data class PriceUpdateRequest(val price: Int)
+// ⚠️ Quarkus + jackson-module-kotlin gotcha: a SINGLE-property data class is treated as a
+//   delegating creator, so {"price":150} fails to bind (the body 150 is expected instead),
+//   making valid requests return 400. Force property-based binding with @JsonCreator(PROPERTIES).
+//   (Multi-field DTOs like ProductCreateRequest(name, price) are NOT affected.)
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class PriceUpdateRequest @JsonCreator(mode = JsonCreator.Mode.PROPERTIES) constructor(
+    @JsonProperty("price") val price: Int,
+)
 
 // ProductService.kt — business logic
 //   Note: Service must not throw HTTP-level exceptions. Return null for "not found".

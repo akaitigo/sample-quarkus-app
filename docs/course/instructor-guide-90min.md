@@ -422,6 +422,8 @@ Step 5: Report
 
 > 講師フォールバック: もし skill が自動発火せず RPI フローが浅い場合でも、plan mode 突入と AGENTS.md 読み込みは `defaultMode`/自動 import で **確実に起きる**ので効果は示せる。明示的に呼びたければ「quarkus-kotlin-feature skill を使って」と足してもよい（ただし *足さなくても効く* のが今日の主眼）。所要が延びそうなら録画フォールバックに切替（→ デモ手順書）。
 
+> ⚠️ Jackson の罠（事前に知っておく）: `PriceUpdateRequest` を単一プロパティ data class で作ると `{"price":150}` が 400 になり、正常系・404 テストが落ちる（`jackson-module-kotlin` の委譲コンストラクタ誤認）。skill の DTO 例は `@JsonCreator(PROPERTIES)` 込みなので skill に従えば通る。逆に **テストが落ちて Claude が自己修正する様子は『検証軸が効いている』最高の実演**にもなる（時間がある時だけ見せる）。詳細は `docs/ai/architecture.md`「既知の落とし穴」。
+
 #### 比較サマリ (2 分)
 
 | 観点 | ハーネスなし | ハーネスあり |

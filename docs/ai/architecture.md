@@ -143,6 +143,28 @@ src/test/kotlin/com/example/products/
 
 ---
 
+## Quarkus + Kotlin の既知の落とし穴
+
+### 単一プロパティ DTO の JSON バインド (重要)
+
+`PriceUpdateRequest(val price: Int)` のように **プロパティが 1 つだけの data class** は、`jackson-module-kotlin` が「委譲コンストラクタ」と解釈し、`{"price": 150}` ではなく **裸の値 `150`** を期待してしまう。この結果、正しいリクエストが **400 になり、正常系・404 のテストが落ちる**。
+
+対処: コンストラクタに `@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)` と各引数に `@JsonProperty` を付け、プロパティバインドを明示する。
+
+```kotlin
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class PriceUpdateRequest @JsonCreator(mode = JsonCreator.Mode.PROPERTIES) constructor(
+    @JsonProperty("price") val price: Int,
+)
+```
+
+- `ProductCreateRequest(name, price)` のような **2 つ以上のプロパティを持つ DTO は影響を受けない**（委譲と誤解されない）。
+- 症状が「正常系まで 400」なら、まずこの落とし穴を疑う。テスト（Resource 層 200/404）がこのミスを機械的に検出してくれる ＝ ハーネスの検証軸が効いている例。
+
+---
+
 ## 関連
 
 - レビュー観点: `code-review.md`

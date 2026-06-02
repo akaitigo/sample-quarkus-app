@@ -159,8 +159,8 @@ claude
 期待される挙動（プロンプトは雑なまま、**環境だけで** こう変わる）:
 
 - **`defaultMode: "plan"` で自動的に plan mode に入る**（頼んでいない）
-- **AGENTS.md を読む** (画面で確認)
-- **docs/ai/architecture.md を読む** (画面で確認)
+- **AGENTS.md の内容に沿う**（Claude Code は CLAUDE.md を自動読込 → `@AGENTS.md` import で AGENTS.md がコンテキストに入っている）
+- **docs/ai/architecture.md を自分から読む** (画面で確認)
 - plan（書面計画）に 変更ファイル一覧 / テスト戦略 / リスク が出る
 - 計画承認後に実装
 - Resource は HTTP 境界に留まる
@@ -245,9 +245,11 @@ claude
 ### AGENTS.md を読まない / plan mode に入らない（＝デモの効果が出ない）
 
 これが起きると Round 2 が Round 1 と区別つかなくなるので最優先で確認:
-- Claude Code 起動時の **cwd が `sample-quarkus-app/` 直下** か（ここがズレると AGENTS.md/CLAUDE.md/settings.json が読まれない）
-- `.claude/settings.json` の `defaultMode: "plan"` を確認（無いと plan mode に入らない）
-- `/memory` で AGENTS.md/CLAUDE.md が読み込まれているか確認
+- Claude Code 起動時の **cwd が `sample-quarkus-app/` 直下** か（ここがズレると CLAUDE.md/settings.json が読まれず、`@AGENTS.md` import も効かない）
+- **初回起動の trust verification を承認したか**（未承認だと project の `.claude/settings.json` が効かない）。承認後に plan mode で始まる
+- `.claude/settings.json` の `defaultMode: "plan"` を確認。なお **project 設定の `"plan"` は起動時に自動適用される**（"auto" と違い無視されない／優先度は project > user）。ただし個人の `.claude/settings.local.json` があると上書きされうる
+- 確実を期すなら起動フラグ **`claude --permission-mode plan`**（CLI 引数は project 設定より優先）
+- `/memory` で CLAUDE.md（→ @AGENTS.md import 経由の AGENTS.md）が読み込まれているか確認
 - Shift+Tab で手動 plan mode 切替も可
 
 ### skill の動きも見せたい場合（任意）

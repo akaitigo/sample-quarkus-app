@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Universal agent brief for this repository. Read by Claude Code, Codex, Cursor, Aider, Copilot Agent, and any other Coding Agent that reads AGENTS.md.
+Universal agent brief for this repository. Read **directly** by Codex (and Cursor/Aider/Copilot Agent that read AGENTS.md natively). **Claude Code reads `CLAUDE.md`, which imports this file via `@AGENTS.md`** — so both toolchains share one source of truth without duplication.
 
 Keep this file as a **pointer-type briefing (under 50 lines)**. Put details in `docs/ai/*.md` and reference them by name.
 

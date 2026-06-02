@@ -98,11 +98,13 @@ AI の性能差だけで成果は決まらない。成果を決めるのは、AI
 
 ### Anthropic / Claude Code
 - [Anthropic Academy: Claude Code 101](https://anthropic.skilljar.com/claude-code-101)
-- [Claude Code Docs](https://docs.claude.com/en/docs/claude-code)
-- [How Claude remembers your project (CLAUDE.md)](https://docs.claude.com/en/docs/claude-code/memory)
-- [Extend Claude with skills](https://docs.claude.com/en/docs/claude-code/skills)
-- [Automate workflows with hooks](https://docs.claude.com/en/docs/claude-code/hooks)
-- [Custom subagents](https://docs.claude.com/en/docs/claude-code/sub-agents)
+- [Claude Code Docs](https://code.claude.com/docs)
+- [Memory (CLAUDE.md / AGENTS.md import)](https://code.claude.com/docs/en/memory)
+- [Permission modes (plan mode 既定化)](https://code.claude.com/docs/en/permission-modes)
+- [Skills](https://code.claude.com/docs/en/skills)
+- [Hooks](https://code.claude.com/docs/en/hooks)
+- [Subagents](https://code.claude.com/docs/en/sub-agents)
+- [Settings](https://code.claude.com/docs/en/settings)
 
 ### OpenAI / Codex
 - [Codex Docs — AGENTS.md](https://developers.openai.com/codex/guides/agents-md)

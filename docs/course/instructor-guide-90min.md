@@ -233,7 +233,7 @@ AGENTS.md / CLAUDE.md の **役割分担と書き方** を体得する。
 
 ### 台本 + デモ
 
-> 「AGENTS.md は **全エージェント共通** のブリーフです。Claude / Codex / Cursor / Aider 全部読みます」
+> 「AGENTS.md は **全エージェント共通** のブリーフです。ただし読まれ方が2系統あります: **Codex は AGENTS.md を直接読む**。一方 **Claude Code が起動時に読むのは CLAUDE.md** で、その中の `@AGENTS.md` というインポートで AGENTS.md を取り込みます。**だから両方のファイルがある**——共通の中身は AGENTS.md に1つ持ち、CLAUDE.md は薄く保って import するわけです。Cursor 等も各自の読込ファイル(`.cursorrules` 等)から参照させれば共通化できます」
 
 リポジトリの `AGENTS.md` を画面で開く。要素を順に解説:
 
@@ -413,7 +413,7 @@ Step 5: Report
 
 観察ポイント (講師が解説):
 - `defaultMode: "plan"` で **自動的に plan mode** に入る（頼んでいないのに）
-- **AGENTS.md / `docs/ai/architecture.md` を自分から読みに行く**（証拠を画面で示す）
+- **AGENTS.md の内容に沿って動く**（Claude Code は起動時に CLAUDE.md を自動読込 → その `@AGENTS.md` import で AGENTS.md がコンテキストに入る）。その指示に従い **`docs/ai/architecture.md` を自分から読みに行く**（証拠を画面で示す）
 - Service 層に 0 円未満チェック / Resource は HTTP 境界に留まる
 - テストを同時に追加
 - **頼んでいないのに完了報告にテスト結果・リスクが付く** ← これが核心
@@ -454,7 +454,7 @@ Step 5: Report
 ### Q&A 想定
 
 - **Q**: 「プロンプトが同じなら、なぜ結果が変わる?」
-- **A**: 「AGENTS.md/CLAUDE.md は起動時に自動で読まれ、`defaultMode: plan` で plan mode に入り、DoD が完了基準を強制するから。依頼文に書かなくても環境が効いている」
+- **A**: 「Claude Code は起動時に CLAUDE.md を自動で読み、その `@AGENTS.md` import で AGENTS.md も入る。`defaultMode: plan` で plan mode に入り、AGENTS.md の DoD が完了基準を強制するから。依頼文に書かなくても環境が効いている」
 - **Q**: 「ハーネスを書くコストは?」
 - **A**: 「初回 30〜60 分。育てるコストは PR ごとに 5 分以内。投資対効果はチーム規模 × 開発期間で見て十分回収できる」
 

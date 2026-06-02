@@ -154,11 +154,13 @@ Meet チャットを使います。テンプレ:
 
 これでも直らなければチャットへ。
 
-### Claude Code / Codex が AGENTS.md を読まない
+### Claude Code が AGENTS.md / 規約を読まない・plan mode で始まらない
 
-- 起動時の cwd が `sample-quarkus-app/` 配下になっているか確認
+- 起動時の cwd が `sample-quarkus-app/` **直下**になっているか確認（Claude Code は CLAUDE.md を読み、その `@AGENTS.md` import で AGENTS.md が入る。cwd がズレると両方読まれない）
+- **初回起動の trust(信頼)確認を承認**したか。承認後に project の `.claude/settings.json`（`defaultMode: "plan"`）が効き、plan mode で始まる
+- plan mode で始まらないときは **`claude --permission-mode plan`** で起動（最も確実）。または起動後 `Shift+Tab`
 - `/memory` で読み込み済みファイル一覧を確認 (Claude Code)
-- 新規セッションを開く
+- Codex は AGENTS.md を直接読む（cwd 配下に AGENTS.md があること）
 
 ### Hook が遅すぎる
 
@@ -170,7 +172,7 @@ Meet チャットを使います。テンプレ:
 ## 参考資料 (講座前に読んでおくと深まる)
 
 - [Mitchell Hashimoto: My AI adoption journey](https://mitchellh.com/writing/my-ai-adoption-journey) — Harness Engineering の原典
-- [Claude Code Docs](https://docs.claude.com/en/docs/claude-code)
+- [Claude Code Docs](https://code.claude.com/docs)
 - [Codex Docs — AGENTS.md](https://developers.openai.com/codex/guides/agents-md)
 - [Quarkus Kotlin guide](https://quarkus.io/guides/kotlin)
 

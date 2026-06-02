@@ -1,0 +1,35 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.fleet/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Quarkus
+.quarkus/
+
+# Local environment
+.env
+.env.local
+*.local
+
+# Backup
+*.bak
+*.swp
+*~
+
+# Claude Code local state
+.claude/local/

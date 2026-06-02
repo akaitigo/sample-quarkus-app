@@ -107,7 +107,7 @@ AGENTS.md / CLAUDE.md / Skills / Hooks / Subagents の **役割分担** を理�
 
 | 公式機能 | 軸 | 提供元 | 役割 |
 |---|---|---|---|
-| `AGENTS.md` | 文脈 | OpenAI 発・Claude も読む | **全エージェント共通** のブリーフ。プロジェクト概要・規約・DoD |
+| `AGENTS.md` | 文脈 | ベンダー中立のオープン標準（Codex/Cursor/Amp 等が採用・Claude も読む） | **全エージェント共通** のブリーフ。プロジェクト概要・規約・DoD |
 | `CLAUDE.md` | 文脈 | Anthropic | **Claude Code 専用** の追加。`@AGENTS.md` import 推奨。薄く |
 | `docs/ai/*.md` | 文脈 | 自前 | **詳細リファレンス**。AGENTS.md からポインタで参照 |
 | Skills | 再利用 | 両者あり (`.claude/skills/`, `.agents/skills/`) | 繰り返し手順を **SKILL.md** にパッケージ化 |

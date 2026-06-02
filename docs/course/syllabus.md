@@ -105,9 +105,10 @@ AI の性能差だけで成果は決まらない。成果を決めるのは、AI
 - [Custom subagents](https://docs.claude.com/en/docs/claude-code/sub-agents)
 
 ### OpenAI / Codex
-- [Codex Docs — AGENTS.md](https://platform.openai.com/docs/codex/agents-md)
-- [Codex Docs — Best practices](https://platform.openai.com/docs/codex/best-practices)
-- [Codex Docs — Agent Skills](https://platform.openai.com/docs/codex/skills)
+- [Codex Docs — AGENTS.md](https://developers.openai.com/codex/guides/agents-md)
+- [Codex Docs — Agent Skills](https://developers.openai.com/codex/skills)
+- [Codex 開発者ハブ](https://developers.openai.com/codex/)
+- [AGENTS.md オープン標準](https://agents.md/)
 
 ### Quarkus / Kotlin
 - [Quarkus Kotlin guide](https://quarkus.io/guides/kotlin)

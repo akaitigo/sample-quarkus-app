@@ -171,7 +171,7 @@ Meet チャットを使います。テンプレ:
 
 - [Mitchell Hashimoto: My AI adoption journey](https://mitchellh.com/writing/my-ai-adoption-journey) — Harness Engineering の原典
 - [Claude Code Docs](https://docs.claude.com/en/docs/claude-code)
-- [Codex Docs — AGENTS.md](https://platform.openai.com/docs/codex/agents-md)
+- [Codex Docs — AGENTS.md](https://developers.openai.com/codex/guides/agents-md)
 - [Quarkus Kotlin guide](https://quarkus.io/guides/kotlin)
 
 ---

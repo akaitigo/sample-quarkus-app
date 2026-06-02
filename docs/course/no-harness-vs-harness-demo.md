@@ -261,7 +261,7 @@ claude
 - **A**: 「Phase 4 から。Phase 1〜3 (AGENTS.md / docs/ai / Skill) だけでも効果は出る」
 
 - **Q**: 「他の AI (Cursor / Aider) でも効く?」
-- **A**: 「AGENTS.md は OpenAI 発で Codex 系も読む。Cursor は `.cursorrules` を別途読む。それぞれの読込ファイルに同じポインタを置けば移植可能」
+- **A**: 「AGENTS.md は **ベンダー中立のオープン標準**（Codex / Cursor / Amp / Google Jules 等が採用、仕様は `openai/agents.md`、Linux Foundation 配下で運営）。Claude Code も読む。Cursor は `.cursorrules` も別途読む。各エージェントの読込ファイルに同じポインタを置けば移植できる」
 
 - **Q**: 「ハーネスなしリポジトリは本当に削除した?」
 - **A**: 「コピーで作ったので、本物のリポジトリは無傷。**本物に手を入れるときは必ずコピーかブランチで**」

@@ -304,7 +304,7 @@ git restore .          # 配布リポジトリは git 管理済みなので clea
 git clean -fd          # Round 2 で新規追加されたテスト等も除去（DTO は元から提供済み）
 ```
 
-> 配布リポジトリは `git init` + 初期コミット済みで配っている前提（→ `20_URL置換手順.md` / README）。`git restore` が `fatal: not a git repository` になる場合は、リポジトリが git 化されていない。その時は配布元から再展開する。
+> 配布リポジトリは git 初期化済みのため `git restore` で初期状態に戻る。`fatal: not a git repository` になった場合は git 化されていないので、配布元から再取得する。
 
 ---
 

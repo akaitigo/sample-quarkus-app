@@ -169,7 +169,7 @@ src/test/kotlin/com/example/products/ProductServiceTest.kt      (テスト追加
 
 ## 実行したテスト
 ./gradlew test
-→ BUILD SUCCESSFUL — 全 N テスト緑
+→ BUILD SUCCESSFUL — 全テスト緑（初期14 + 追加分）
 
 ## 残るリスク
 - 価格 0 円「ちょうど」を許容するかは未確認 (現状は許容)

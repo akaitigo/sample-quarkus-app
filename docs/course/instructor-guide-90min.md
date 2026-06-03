@@ -56,7 +56,7 @@
 
 > **AI 活用 = AI が作業できる文脈・制約・検証・再利用手順をリポジトリに埋め込むこと**
 
-> 「これを総称して **Harness Engineering** と呼びます。Mitchell Hashimoto (元 HashiCorp / Vagrant 作者) が 2026 年 2 月に提唱した概念で、原文は短くてシンプルです」
+> 「これを **Harness Engineering** と呼びます。Mitchell Hashimoto (元 HashiCorp / Vagrant 作者) が 2026 年 2 月の記事で自身の AI 開発フローをそう呼び始めた考え方です（本人も『業界で確立した用語かは分からないが自分はこう呼んでいる』と断っています）。原文は短くてシンプルです」
 
 > *"anytime you find an agent makes a mistake, you take the time to engineer a solution such that the agent never makes that mistake again"*
 >

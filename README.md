@@ -29,7 +29,7 @@ java -version
 # ビルド
 ./gradlew build
 
-# テスト (全 N テスト緑になること)
+# テスト (初期状態で全 14 テスト緑になること)
 ./gradlew test
 
 # 開発モード

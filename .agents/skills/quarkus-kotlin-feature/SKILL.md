@@ -47,19 +47,12 @@ Follow the architecture rules from `docs/ai/architecture.md`:
 Example for "update product price" — match the existing `create()` flow (see `ProductResource.kt:31-40` and `ProductService.kt:14-19`):
 
 ```kotlin
-// dto/PriceUpdateRequest.kt
-// ⚠️ Quarkus + jackson-module-kotlin gotcha: a SINGLE-property data class is treated as a
-//   delegating creator, so {"price":150} fails to bind (the body 150 is expected instead),
-//   making valid requests return 400. Force property-based binding with @JsonCreator(PROPERTIES).
-//   (Multi-field DTOs like ProductCreateRequest(name, price) are NOT affected.)
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
+// dto/PriceUpdateRequest.kt — ALREADY PROVIDED in the repo. Use it as-is; do NOT recreate it.
+//   (It carries @JsonCreator(mode = PROPERTIES) because a single-property Kotlin data class
+//    otherwise fails to bind {"price":150} and returns 400 — see docs/ai/architecture.md.
+//    If you ever create a NEW single-property DTO yourself, apply the same annotation.)
 
-data class PriceUpdateRequest @JsonCreator(mode = JsonCreator.Mode.PROPERTIES) constructor(
-    @JsonProperty("price") val price: Int,
-)
-
-// ProductService.kt — business logic
+// ProductService.kt — business logic (THIS is what you implement)
 //   Note: Service must not throw HTTP-level exceptions. Return null for "not found".
 fun updatePrice(id: Long, newPrice: Int): Product? {
     require(newPrice >= 0) { "Price must be non-negative" }

@@ -96,7 +96,8 @@ curl http://localhost:8080/products
     │   ├── ProductRepository.kt       インメモリ永続化
     │   └── dto/
     │       ├── ProductDto.kt          レスポンス DTO
-    │       └── ProductCreateRequest.kt
+    │       ├── ProductCreateRequest.kt
+    │       └── PriceUpdateRequest.kt  価格更新リクエスト (scaffold 提供済み)
     └── test/kotlin/com/example/products/
         ├── ProductResourceTest.kt
         ├── ProductServiceTest.kt
@@ -116,7 +117,7 @@ curl http://localhost:8080/products
 - 正常時は更新後の商品情報を返す
 - テスト追加 (正常 / 0 円未満 / 404)
 
-実装は **未着手** の状態で配布されています (`ProductService.updatePrice` は意図的にコメントのみ)。
+リクエスト DTO `dto/PriceUpdateRequest` は **scaffold として提供済み**（`@JsonCreator` 込み）。`ProductService.updatePrice` と `ProductResource` の PATCH エンドポイント・テストが **未実装** の状態で配布されています（`ProductService` 内に実装手順のヒントをコメントで記載）。
 
 ---
 

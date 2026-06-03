@@ -15,7 +15,16 @@ class ProductService(private val repository: ProductRepository) {
         return repository.save(Product(id = 0L, name = name, price = price))
     }
 
-    // NOTE: updatePrice is intentionally NOT implemented.
-    // The workshop hands-on (§6) asks participants to add it.
-    // See docs/course/hands-on.md for requirements.
+    // NOTE: updatePrice is intentionally NOT implemented — this is the workshop hands-on (§6).
+    // The request DTO `dto/PriceUpdateRequest` is ALREADY provided (it carries the Jackson
+    // single-property fix, so you don't need to touch it). Your task — match the existing
+    // create()/get() patterns above:
+    //   1. fun updatePrice(id: Long, newPrice: Int): Product?
+    //        require(newPrice >= 0) { ... }      // 0円未満は IllegalArgumentException
+    //        repository.findById(id) ?: return null   // 不存在は null（HTTP例外を投げない）
+    //        return repository.save(product.copy(price = newPrice))
+    //   2. ProductResource に PATCH /products/{id}/price を追加
+    //        IllegalArgumentException → 400 / null → 404（get() と同じ流儀）
+    //   3. テスト 3 ケース（200 / 400 / 404）
+    // 詳細は docs/course/hands-on.md。
 }

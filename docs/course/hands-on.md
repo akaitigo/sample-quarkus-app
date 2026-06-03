@@ -26,7 +26,9 @@
 6. `./gradlew test` が緑
 7. アーキテクチャ規約に従う (Resource にロジック禁止、Service に業務ロジック)
 
-> ⚠️ **既知の落とし穴**: `PriceUpdateRequest(val price: Int)` のような **単一プロパティの data class** は `jackson-module-kotlin` が委譲コンストラクタと誤解し、`{"price":150}` が 400 になります（正常系・404 テストが落ちる）。`@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)` + `@JsonProperty("price")` で回避。詳細は `docs/ai/architecture.md`「既知の落とし穴」。`quarkus-kotlin-feature` Skill の DTO 例はこの対処込みです。
+> 📦 **DTO は提供済み**: リクエスト DTO `dto/PriceUpdateRequest`（`price: Int`）は scaffold として最初から入っています。**新規作成は不要**で、そのまま使って Service と Resource を実装します。あなたが作るのは **`ProductService.updatePrice` + `ProductResource` の PATCH + テスト 3 本** の 3 つです。
+>
+> （補足: 提供済み DTO には `@JsonCreator(mode = PROPERTIES)` が付いています。単一プロパティの Kotlin data class は `jackson-module-kotlin` が委譲コンストラクタと誤解して `{"price":150}` を 400 にしてしまう既知の罠があり、それを回避するため。自分で単一プロパティ DTO を新規に作る時は同じ対処が要ります。詳細は `docs/ai/architecture.md`「既知の落とし穴」。）
 
 ---
 
@@ -139,7 +141,7 @@ quarkus-kotlin-feature skill を使って、商品価格更新 API を追加し�
 ```
 src/main/kotlin/com/example/products/ProductResource.kt          (新エンドポイント追加)
 src/main/kotlin/com/example/products/ProductService.kt           (updatePrice メソッド + 0 円未満チェック)
-src/main/kotlin/com/example/products/dto/PriceUpdateRequest.kt   (新規)
+src/main/kotlin/com/example/products/dto/PriceUpdateRequest.kt   (提供済み・変更不要)
 src/test/kotlin/com/example/products/ProductResourceTest.kt     (テスト追加)
 src/test/kotlin/com/example/products/ProductServiceTest.kt      (テスト追加)
 ```
@@ -150,7 +152,7 @@ src/test/kotlin/com/example/products/ProductServiceTest.kt      (テスト追加
 ## 変更ファイル
 - ProductResource.kt: PATCH /products/{id}/price を追加
 - ProductService.kt: updatePrice(id, newPrice) — 0 円未満で IllegalArgumentException、id 不存在で null
-- dto/PriceUpdateRequest.kt: 新規 (price: Int)
+- dto/PriceUpdateRequest.kt: 提供済みを使用（変更なし）
 - ProductResourceTest.kt: 正常系 (200) / 0 円未満 (400) / 404 を追加
 - ProductServiceTest.kt: updatePrice 単体 (正常 / 0 円未満 / id 不存在) を追加
 

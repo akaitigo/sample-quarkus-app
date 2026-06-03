@@ -165,7 +165,7 @@ claude
 - 計画承認後に実装
 - Resource は HTTP 境界に留まる
 - Service に 0 円未満チェック
-- DTO (PriceUpdateRequest) を新規作成
+- 提供済み DTO `PriceUpdateRequest` を使って Service + Resource を実装（DTO は新規作成しない）
 - テスト 3 ケース追加
 - `./gradlew test` を自動実行
 - **頼んでいないのに** 完了報告が構造化される (変更ファイル / 実装した振る舞い / テスト結果 / リスク)
@@ -207,7 +207,7 @@ claude
 | 計画 | 出ない / 暗黙 | plan mode で書面化 |
 | 設計判断 | Resource にロジック流入の可能性 | Service に集約（層分離を遵守） |
 | バリデーション | 場所が曖昧 | Service (DoD 通り) |
-| DTO | プリミティブで済ます可能性 | PriceUpdateRequest 作成 |
+| DTO | プリミティブで済ます可能性 | 提供済み PriceUpdateRequest を使う |
 | テスト | 抜けやすい / 雑 | 3 ケース揃う |
 | Format | 手動 / 抜ける | Hook が自動 |
 | 完了報告 | 「できました」 | 変更点・テスト結果・リスク |
@@ -230,11 +230,10 @@ claude
 - 「これでも良いが、**チームで毎回これを期待できるか?**」と問いかける
 - 別の受講者に同じプロンプトを打ってもらい、結果のバラつきを見せる (時間があれば)
 
-### Round 2 で正常系・404 が 400 になる（単一プロパティ DTO の Jackson 罠）
+### Round 2 で正常系・404 が 400 になる（単一プロパティ DTO の Jackson 罠 — 通常は回避済み）
 
-`PriceUpdateRequest(val price: Int)` は単一プロパティ data class のため `jackson-module-kotlin` が `{"price":150}` を受け付けず 400 になる既知の罠。**むしろ絶好の教材**: テスト（Resource 200/404）がこのミスを機械的に検出する＝検証軸が効いている実例として見せられる。
-- 講師の選択肢A（安全）: `quarkus-kotlin-feature` Skill の DTO 例は `@JsonCreator(PROPERTIES)` 込みなので、skill に従えば一発で通る。
-- 講師の選択肢B（教材化）: あえて素の単一プロパティ DTO で 400 を出し、テストが落ちる→ Claude が `@JsonCreator` で自己修正する流れを見せる（時間に余裕がある時のみ。デモ手順書冒頭のフォールバック方針に従う）。
+単一プロパティ data class は `jackson-module-kotlin` が `{"price":150}` を受け付けず 400 になる罠がある。**本リポジトリは `dto/PriceUpdateRequest` を `@JsonCreator(PROPERTIES)` 込みで提供済み**なので、これを使う限り 400 にはならない（実機検証で、提供しないと AI が素の DTO を書いて 10 分超ハマることを確認したため、scaffold 化した）。
+- もし 400 が出たら: AI が提供済み DTO を使わず**自分で素の単一プロパティ DTO を新規作成**した可能性。提供済みの `PriceUpdateRequest` を使うよう促す。
 - 詳細: `docs/ai/architecture.md`「既知の落とし穴」。
 
 ### Round 2 で Hook が遅くてデモが止まる
@@ -286,7 +285,7 @@ rm -rf /path/to/working-dir/sample-quarkus-app-no-harness
 # Round 2 で本物リポジトリに生まれた変更（価格更新 API 実装）を破棄
 cd /path/to/working-dir/sample-quarkus-app
 git restore .          # 配布リポジトリは git 管理済みなので clean state に戻る
-git clean -fd          # 新規追加された PriceUpdateRequest.kt 等も除去
+git clean -fd          # Round 2 で新規追加されたテスト等も除去（DTO は元から提供済み）
 ```
 
 > 配布リポジトリは `git init` + 初期コミット済みで配っている前提（→ `20_URL置換手順.md` / README）。`git restore` が `fatal: not a git repository` になる場合は、リポジトリが git 化されていない。その時は配布元から再展開する。

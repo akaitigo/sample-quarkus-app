@@ -112,7 +112,8 @@ src/main/kotlin/com/example/products/
 ├── ProductRepository.kt        Repository 層
 └── dto/
     ├── ProductDto.kt           レスポンス DTO
-    └── ProductCreateRequest.kt 商品登録リクエスト
+    ├── ProductCreateRequest.kt 商品登録リクエスト
+    └── PriceUpdateRequest.kt   価格更新リクエスト（scaffold 提供済み・@JsonCreator 込み）
 
 src/test/kotlin/com/example/products/
 ├── ProductResourceTest.kt      Resource 層テスト (REST Assured)
@@ -120,12 +121,15 @@ src/test/kotlin/com/example/products/
 └── ProductRepositoryTest.kt    Repository 層テスト
 ```
 
-ハンズオン完了後に追加されるもの (受講者が作成):
+ハンズオン (§6) で受講者が実装するもの:
 
 ```
-└── dto/
-    └── PriceUpdateRequest.kt   価格更新リクエスト (新規)
+ProductService.kt   … updatePrice(id, newPrice): Product? を実装（未実装で配布）
+ProductResource.kt  … PATCH /products/{id}/price を追加（未実装で配布）
+src/test/...        … 200 / 400 / 404 のテストを追加
 ```
+
+DTO（`PriceUpdateRequest`）は **scaffold として提供済み**（後述の Jackson 罠を回避する `@JsonCreator` 込み）。受講者は新規作成不要で、これを使って Service と Resource を実装する。
 
 ---
 
@@ -134,22 +138,21 @@ src/test/kotlin/com/example/products/
 例: 「商品価格更新 API」を追加する場合
 
 1. `docs/ai/testing.md` を読んでテスト方針を確認
-2. `dto/PriceUpdateRequest.kt` を新規作成 (リクエスト形状)
-3. `ProductService.updatePrice(id, newPrice)` を追加 (業務ロジック)
-4. `ProductRepository` に必要なら更新メソッド追加
-5. `ProductResource.updatePrice()` エンドポイント追加 (HTTP 境界)
-6. テスト追加 (正常系 / 0 円未満 / 404)
-7. `./gradlew test` で確認
+2. `dto/PriceUpdateRequest` は **提供済み**（新規作成不要・そのまま使う）
+3. `ProductService.updatePrice(id, newPrice): Product?` を追加（0 円未満は `IllegalArgumentException`、不存在は `null`）
+4. `ProductResource` に `PATCH /products/{id}/price` を追加（`IllegalArgumentException`→400、`null`→404。既存 `get()` と同じ流儀）
+5. テスト追加 (正常系 / 0 円未満 / 404)
+6. `./gradlew test` で確認
 
 ---
 
 ## Quarkus + Kotlin の既知の落とし穴
 
-### 単一プロパティ DTO の JSON バインド (重要)
+### 単一プロパティ DTO の JSON バインド (重要・提供済み DTO が対処済み)
 
 `PriceUpdateRequest(val price: Int)` のように **プロパティが 1 つだけの data class** は、`jackson-module-kotlin` が「委譲コンストラクタ」と解釈し、`{"price": 150}` ではなく **裸の値 `150`** を期待してしまう。この結果、正しいリクエストが **400 になり、正常系・404 のテストが落ちる**。
 
-対処: コンストラクタに `@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)` と各引数に `@JsonProperty` を付け、プロパティバインドを明示する。
+本リポジトリの `dto/PriceUpdateRequest` は **この対処を込みで提供済み**（だから `@JsonCreator` が付いている）。新しく単一プロパティ DTO を作るときは同じ対処が要る：コンストラクタに `@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)` と各引数に `@JsonProperty` を付け、プロパティバインドを明示する。
 
 ```kotlin
 import com.fasterxml.jackson.annotation.JsonCreator

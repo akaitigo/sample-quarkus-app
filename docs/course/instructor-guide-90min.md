@@ -197,11 +197,13 @@ sample-quarkus-app/
     │   ├── ProductService.kt    業務ロジック
     │   ├── ProductRepository.kt インメモリ永続化
     │   ├── Product.kt           ドメインモデル
-    │   └── dto/                 ProductDto, ProductCreateRequest
+    │   └── dto/                 ProductDto, ProductCreateRequest, PriceUpdateRequest(提供済)
     └── test/kotlin/...
 ```
 
-> 「`PriceUpdateRequest` はまだ無い。**価格更新 API 用の DTO で、§6 デモ（と課後の各自ハンズオン）で追加します**。リポジトリは『価格更新 API 未実装』で配布しています」
+> 「`dto/PriceUpdateRequest` は **scaffold として提供済み**（リクエスト形状の DTO）。`ProductService.updatePrice` と `ProductResource` の PATCH エンドポイント・テストが **未実装** の状態で配布しています。§6 ではこの未実装部分を埋めます」
+
+> 講師メモ: DTO を提供済みにしているのは、単一プロパティ DTO の Jackson 罠（後述）で実演が脱線するのを防ぐため。実機検証で、雑プロンプトだと AI がこの罠を踏んで 10 分超ハマることを確認済み。DTO を渡しておけば Round 2 は素直に通る。
 
 `src/main/kotlin/com/example/products/ProductResource.kt` を開いて、以下を強調:
 
@@ -422,7 +424,7 @@ Step 5: Report
 
 > 講師フォールバック: もし skill が自動発火せず RPI フローが浅い場合でも、plan mode 突入と AGENTS.md 読み込みは `defaultMode`/自動 import で **確実に起きる**ので効果は示せる。明示的に呼びたければ「quarkus-kotlin-feature skill を使って」と足してもよい（ただし *足さなくても効く* のが今日の主眼）。所要が延びそうなら録画フォールバックに切替（→ デモ手順書）。
 
-> ⚠️ Jackson の罠（事前に知っておく）: `PriceUpdateRequest` を単一プロパティ data class で作ると `{"price":150}` が 400 になり、正常系・404 テストが落ちる（`jackson-module-kotlin` の委譲コンストラクタ誤認）。skill の DTO 例は `@JsonCreator(PROPERTIES)` 込みなので skill に従えば通る。逆に **テストが落ちて Claude が自己修正する様子は『検証軸が効いている』最高の実演**にもなる（時間がある時だけ見せる）。詳細は `docs/ai/architecture.md`「既知の落とし穴」。
+> ⚠️ Jackson の罠（DTO 提供で回避済み）: 単一プロパティ DTO は `jackson-module-kotlin` の委譲コンストラクタ誤認で `{"price":150}` が 400 になる罠がある。**実機検証で、雑プロンプトだと AI が自分で素の DTO を書いてこの罠を踏み、10 分超ハマる**ことを確認したため、`dto/PriceUpdateRequest` は `@JsonCreator(PROPERTIES)` 込みで提供済みにしてある。よって Round 2 は脱線せず通る。罠の解説は `docs/ai/architecture.md`「既知の落とし穴」。
 
 #### 比較サマリ (2 分)
 

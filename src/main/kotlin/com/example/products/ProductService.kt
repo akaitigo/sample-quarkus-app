@@ -15,7 +15,8 @@ class ProductService(private val repository: ProductRepository) {
         return repository.save(Product(id = 0L, name = name, price = price))
     }
 
-    // NOTE: updatePrice is intentionally NOT implemented — this is the workshop hands-on (§6).
+    // NOTE: updatePrice is intentionally NOT implemented — it is the §6 instructor-demo target.
+    //   Participants implement it in post-session self-study (docs/course/hands-on.md), not live.
     // The request DTO `dto/PriceUpdateRequest` is ALREADY provided (it carries the Jackson
     // single-property fix, so you don't need to touch it). Your task — match the existing
     // create()/get() patterns above:

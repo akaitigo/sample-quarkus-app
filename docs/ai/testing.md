@@ -67,7 +67,7 @@ fun `updatePrice with negative value throws IllegalArgumentException`() {
 
 ## Resource 層テスト (REST Assured 例)
 
-`createProduct` 等のヘルパは作らず、既存テスト (`ProductResourceTest.kt`) に倣って **POST をインライン** で書く。
+既存テスト (`ProductResourceTest.kt`) は **POST をインライン** で書いている（共有ヘルパは無い）。まずそれに倣い、重複が増えたらテストクラス内の `private` 関数（下記 `createProductReturnsId` 等）に括り出してよい。
 
 ```kotlin
 @QuarkusTest

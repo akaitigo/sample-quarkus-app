@@ -44,7 +44,7 @@ Follow the architecture rules from `docs/ai/architecture.md`:
 - **Repository**: Persistence access only. No business rules.
 - **DTO**: Separate from domain model. Use `dto/` subpackage.
 
-Example for "update product price" — match the existing `create()` flow (see `ProductResource.kt:31-40` and `ProductService.kt:14-19`):
+Example for "update product price" — match the existing `create()` flow in `ProductResource.kt` and `ProductService.kt` (grep for `fun create`):
 
 ```kotlin
 // dto/PriceUpdateRequest.kt — ALREADY PROVIDED in the repo. Use it as-is; do NOT recreate it.

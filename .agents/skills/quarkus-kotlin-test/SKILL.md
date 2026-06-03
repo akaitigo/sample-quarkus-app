@@ -61,7 +61,7 @@ class ProductServiceTest {
 
 ### Resource-layer tests (QuarkusTest + REST Assured)
 
-Match the existing inline POST style (`ProductResourceTest.kt:60-75`). No `createProduct(...)` helper exists — set up via REST and extract the id.
+Match the existing inline POST style in `ProductResourceTest.kt` (the existing tests inline the POST and extract the id; no shared helper yet). Inline it, or extract a class-local `private` helper if it reduces duplication.
 
 ```kotlin
 @QuarkusTest

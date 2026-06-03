@@ -424,7 +424,7 @@ Step 5: Report
 
 > 講師フォールバック: もし skill が自動発火せず RPI フローが浅い場合でも、plan mode 突入と AGENTS.md 読み込みは `defaultMode`/自動 import で **確実に起きる**ので効果は示せる。明示的に呼びたければ「quarkus-kotlin-feature skill を使って」と足してもよい（ただし *足さなくても効く* のが今日の主眼）。所要が延びそうなら録画フォールバックに切替（→ デモ手順書）。
 
-> ⚠️ Jackson の罠（DTO 提供で回避済み）: 単一プロパティ DTO は `jackson-module-kotlin` の委譲コンストラクタ誤認で `{"price":150}` が 400 になる罠がある。**実機検証で、雑プロンプトだと AI が自分で素の DTO を書いてこの罠を踏み、10 分超ハマる**ことを確認したため、`dto/PriceUpdateRequest` は `@JsonCreator(PROPERTIES)` 込みで提供済みにしてある。よって Round 2 は脱線せず通る。罠の解説は `docs/ai/architecture.md`「既知の落とし穴」。
+> ⚠️ Jackson の罠（DTO 提供で回避済み）: 単一プロパティ DTO は Quarkus の Jackson 統合下で `{"price":150}` が正しくバインドされず 400 になる罠がある（実機検証済）。**雑プロンプトだと AI が自分で素の DTO を書いてこの罠を踏み、10 分超ハマる**ことを確認したため、`dto/PriceUpdateRequest` は `@JsonCreator(PROPERTIES)` 込みで提供済みにしてある。よって Round 2 は脱線せず通る。罠の解説は `docs/ai/architecture.md`「既知の落とし穴」。
 
 #### 比較サマリ (2 分)
 
@@ -446,6 +446,7 @@ Step 5: Report
 > 「今 Round 1 で **実際に見たミス** を 1 つ、二度と起きないように潰します。これが Hashimoto の言う *engineer a solution such that the agent never makes that mistake again* の最小サイクルです」
 
 1. Round 1 で観察されたミスを 1 つ板書（例: 「Resource に 0 円チェックを書いた」「テストを書かず完了宣言した」）
+   - ⚠️ フォールバック: Round 1 が綺麗に通ってミスが出なかった場合は、**典型ミスを 1 つ提示**して回す（用意しておく 3 パターン: ①Resource にバリデーション流入 ②not-found を例外で投げ 500 になる ③テストを書かず完了宣言）。「今回は出なかったが一般にこう外す」と前置きすれば体験は成立する。
 2. 受講者は **そのミスを防ぐ AGENTS.md の 1 行** を考え、Meet チャットに投稿
    - 例: 「価格の負数チェックは Service 層で行い、Resource には書かない」
    - 例: 「振る舞いを変えたら必ず対応するテストを追加し、`./gradlew test` 緑を完了条件とする」

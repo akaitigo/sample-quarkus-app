@@ -28,7 +28,7 @@
 
 > 📦 **DTO は提供済み**: リクエスト DTO `dto/PriceUpdateRequest`（`price: Int`）は scaffold として最初から入っています。**新規作成は不要**で、そのまま使って Service と Resource を実装します。あなたが作るのは **`ProductService.updatePrice` + `ProductResource` の PATCH + テスト 3 本** の 3 つです。
 >
-> （補足: 提供済み DTO には `@JsonCreator(mode = PROPERTIES)` が付いています。単一プロパティの Kotlin data class は `jackson-module-kotlin` が委譲コンストラクタと誤解して `{"price":150}` を 400 にしてしまう既知の罠があり、それを回避するため。自分で単一プロパティ DTO を新規に作る時は同じ対処が要ります。詳細は `docs/ai/architecture.md`「既知の落とし穴」。）
+> （補足: 提供済み DTO には `@JsonCreator(mode = PROPERTIES)` が付いています。単一プロパティの Kotlin data class は Quarkus の Jackson 統合下で `{"price":150}` を正しくバインドできず 400 になる既知の罠があり（実機検証済）、それを回避するため。自分で単一プロパティ DTO を新規に作る時は同じ対処が要ります。詳細は `docs/ai/architecture.md`「既知の落とし穴」。）
 
 ---
 
@@ -84,15 +84,19 @@ cd sample-quarkus-app
 
 #### 依頼
 
-新規 Claude Code セッションで:
+新規 Claude Code セッションで、**§6 デモと一字一句同じ雑なプロンプト**を打ちます:
 
 ```
-quarkus-kotlin-feature skill を使って、商品価格更新 API を追加してください。完了前にテスト結果とリスクを報告してください。
+商品価格更新APIを追加して。
 ```
 
-#### Skill 経由の振る舞い (期待)
+> ★ ここが核心。「skill を使って」「テスト結果とリスクを報告して」は **足さないでください**。足さずとも、`defaultMode: plan` で plan mode に入り、`AGENTS.md`（CLAUDE.md の `@AGENTS.md` import 経由）の DoD により **頼んでいないのにテスト実行・リスク報告が出ます**。それが §6 で見せた「環境差」です。報告指示を足すと「プロンプトで頼んだから出た」になり、効果を自分で確認できません。
+>
+> 効果が出ない場合（plan mode に入らない / skill が発火しない 等）のみ、後述の Tips「Claude Code が Skill を呼ばない場合」でフォールバックしてください。
 
-`quarkus-kotlin-feature` Skill が以下を強制:
+#### 期待される振る舞い (環境が効く)
+
+雑なプロンプトのまま、ハーネスが以下を駆動します（`quarkus-kotlin-feature` Skill が発火すればその手順に沿う）:
 
 1. **Step 1: Understand existing design**
    - Resource / Service / Repository / DTO / テストを読む

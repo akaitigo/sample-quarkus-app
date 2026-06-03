@@ -29,6 +29,8 @@ PROTECTED=(
     "CLAUDE.md"
 )
 
+# 注: 教材用の簡易判定（部分一致）。派生名(例: NOTES_AGENTS.md)も巻き込み得る。
+# 本番では basename 一致や末尾一致 (*/AGENTS.md) に厳密化するとよい。
 for p in "${PROTECTED[@]}"; do
     if [[ "$FILE_PATH" == *"$p"* ]]; then
         echo "[Harness] BLOCKED: $FILE_PATH is a protected harness file." >&2

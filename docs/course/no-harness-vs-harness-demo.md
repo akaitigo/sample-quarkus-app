@@ -79,11 +79,13 @@ ls
 # AGENTS.md / CLAUDE.md / .claude/ / .agents/ / docs/ai/ が無いことを受講者に見せる
 ```
 
-#### 2. Claude Code 起動
+#### 2. Claude Code 起動（モデルを Round 2 と揃える）
 
 ```bash
-claude
+claude --model claude-sonnet-4-6
 ```
+
+> ⚠️ no-harness コピーは `.claude/settings.json` を削除済みで、本物リポジトリが固定している model ピン（`claude-sonnet-4-6`）も消えている。フラグ無しで起動すると個人グローバル設定の既定モデル（Opus 等）になり、Round 2（settings.json で sonnet-4-6 固定）とモデルが食い違う。「モデルは同じ・違うのは環境だけ」を成立させるため、Round 1 は **明示的に同じモデルを指定**して起動する。
 
 #### 3. プロンプト
 
@@ -121,7 +123,7 @@ claude
 
 ---
 
-## Round 2: ハーネスあり (7 分)
+## Round 2: ハーネスあり (6 分)
 
 ### 操作
 
@@ -197,21 +199,20 @@ claude
 
 ---
 
-## 比較サマリ (3 分)
+## 比較サマリ (2 分)
 
-スライドに表示しつつ、講師が口頭でまとめる:
+スライド(§6 比較サマリ)に表示する **6 行** を投影しつつ、講師が口頭でまとめる:
 
 | 観点 | Round 1 (ハーネスなし) | Round 2 (ハーネスあり) |
 |---|---|---|
 | 既存設計の調査 | 推測ベース | AGENTS.md / docs/ai 経由 |
-| 計画 | 出ない / 暗黙 | plan mode で書面化 |
+| 計画 | 出ない / 暗黙 | plan mode で自動書面化 |
 | 設計判断 | Resource にロジック流入の可能性 | Service に集約（層分離を遵守） |
-| バリデーション | 場所が曖昧 | Service (DoD 通り) |
-| DTO | プリミティブで済ます可能性 | 提供済み PriceUpdateRequest を使う |
-| テスト | 抜けやすい / 雑 | 3 ケース揃う |
-| Format | 手動 / 抜ける | Hook が自動 |
-| 完了報告 | 「できました」 | 変更点・テスト結果・リスク |
-| 再現性 (別の人に頼む) | バラつく | 揃う |
+| テスト | 抜けやすい / 雑 | DoD で自動的に付く |
+| 完了報告 | 「できました」 | 頼まずとも 変更点・テスト結果・リスク |
+| 再現性 (別の人に頼む) | バラつく | 揃う（SKILL+DoD の共有効果） |
+
+> 口頭補足（スライドには載せない詳細）: バリデーションは Service / DTO は **提供済み** PriceUpdateRequest を使用 / format は Hook が自動。
 
 ### 中心メッセージの再確認
 
@@ -219,7 +220,22 @@ claude
 >
 > 「AI モデルは同じ。**プロンプトは一字一句同じ**。違うのはリポジトリの中身だけ」
 >
+> 「揃うのは AI が賢くなったからではなく、**環境（SKILL/DoD）が答えの形を固定**しているから」
+>
 > 「これが Harness Engineering です」
+
+---
+
+## 観察 → engineer-out 体験 (2 分) ★Hashimoto の核
+
+比較サマリの直後に行う（slide §6 末・instructor §6 と同じ。§6 の死守パート）:
+
+1. Round 1 で **実際に観察されたミス**を 1 つ板書（例: 「Resource に 0 円チェックが入った」「テストが雑/無い」）。
+   - Round 1 が綺麗に通ってミスが出なかった場合は、典型ミス（Resource にバリデーション流入 / 例外で 500 / テスト無し）を 1 つ提示する。
+2. 受講者は **そのミスを防ぐ AGENTS.md の 1 行**を考え、Meet チャットに投稿。
+3. 講師が 1〜2 件読み上げ「この 1 行で次回から AI は同じミスをしない」と締める。
+
+> Hashimoto の *engineer a solution such that the agent never makes that mistake again* を講座内で 1 周回す。§7 で自社リポジトリへ持ち帰る。
 
 ---
 
@@ -232,7 +248,7 @@ claude
 
 ### Round 2 で正常系・404 が 400 になる（単一プロパティ DTO の Jackson 罠 — 通常は回避済み）
 
-単一プロパティ data class は `jackson-module-kotlin` が `{"price":150}` を受け付けず 400 になる罠がある。**本リポジトリは `dto/PriceUpdateRequest` を `@JsonCreator(PROPERTIES)` 込みで提供済み**なので、これを使う限り 400 にはならない（実機検証で、提供しないと AI が素の DTO を書いて 10 分超ハマることを確認したため、scaffold 化した）。
+単一プロパティ data class は Quarkus の Jackson 統合下で `{"price":150}` を正しくバインドできず 400 になる罠がある。**本リポジトリは `dto/PriceUpdateRequest` を `@JsonCreator(PROPERTIES)` 込みで提供済み**なので、これを使う限り 400 にはならない（実機検証で、提供しないと AI が素の DTO を書いて 10 分超ハマることを確認したため、scaffold 化した）。
 - もし 400 が出たら: AI が提供済み DTO を使わず**自分で素の単一プロパティ DTO を新規作成**した可能性。提供済みの `PriceUpdateRequest` を使うよう促す。
 - 詳細: `docs/ai/architecture.md`「既知の落とし穴」。
 

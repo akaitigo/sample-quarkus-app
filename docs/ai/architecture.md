@@ -121,7 +121,7 @@ src/test/kotlin/com/example/products/
 └── ProductRepositoryTest.kt    Repository 層テスト
 ```
 
-ハンズオン (§6) で受講者が実装するもの:
+§6 の講師デモの題材 / 課後 hands-on (Path B) で各自が実装するもの（当日に受講者がフル実装する時間枠は無い）:
 
 ```
 ProductService.kt   … updatePrice(id, newPrice): Product? を実装（未実装で配布）
@@ -150,7 +150,7 @@ DTO（`PriceUpdateRequest`）は **scaffold として提供済み**（後述の 
 
 ### 単一プロパティ DTO の JSON バインド (重要・提供済み DTO が対処済み)
 
-`PriceUpdateRequest(val price: Int)` のように **プロパティが 1 つだけの data class** は、`jackson-module-kotlin` が「委譲コンストラクタ」と解釈し、`{"price": 150}` ではなく **裸の値 `150`** を期待してしまう。この結果、正しいリクエストが **400 になり、正常系・404 のテストが落ちる**。
+`PriceUpdateRequest(val price: Int)` のように **プロパティが 1 つだけの data class** は、Quarkus の Jackson 統合下で `{"price": 150}` を正しくプロパティバインドできず（単一引数コンストラクタが「裸の値」を期待する挙動になり）、**正しいリクエストが 400 になり、正常系・404 のテストが落ちる**（実機検証済）。
 
 本リポジトリの `dto/PriceUpdateRequest` は **この対処を込みで提供済み**（だから `@JsonCreator` が付いている）。新しく単一プロパティ DTO を作るときは同じ対処が要る：コンストラクタに `@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)` と各引数に `@JsonProperty` を付け、プロパティバインドを明示する。
 

@@ -42,7 +42,15 @@ java -version
 ./gradlew build
 ```
 
-初回は依存ダウンロードに 2〜3 分かかります。
+初回は **Gradle 本体（約130MB）+ 依存** をダウンロードするため、回線によっては **5〜10 分**かかることがあります。**前日までに一度 `./gradlew build` を通しておく**と当日詰まりません（28名同時アクセスの緩和にも）。
+
+> 🏢 **社内プロキシ/SSL 中間証明書の環境**: 依存・Gradle 本体の取得が失敗する場合、`~/.gradle/gradle.properties` に以下を設定（値は社内ネットワーク管理に確認）:
+> ```
+> systemProp.https.proxyHost=<host>
+> systemProp.https.proxyPort=<port>
+> # 認証ありなら systemProp.https.proxyUser / proxyPassword も
+> ```
+> 中間証明書がある場合は JDK の `cacerts` への import が必要なことがあります。通らなければ 30 分前までに Slack へ。
 
 ### 4. テスト緑確認
 
@@ -51,6 +59,14 @@ java -version
 ```
 
 **全テストが緑になることを必ず確認してください**。エラーが出る場合は当日 30 分前までに Slack で連絡を。
+
+### 4.5. (Hook を体験するなら) jq を入れておく
+
+```bash
+brew install jq   # macOS
+```
+
+PreToolUse/PostToolUse の Hook は **jq が無いと安全側で何もしません**（保護ブロックも format も無音）。§4 の「AGENTS.md は Hook 保護対象」を体験したい場合は jq を入れてください（無くても作業は進みます）。
 
 ### 5. Claude Code または Codex を準備
 

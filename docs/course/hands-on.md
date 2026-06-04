@@ -40,9 +40,10 @@
 
 #### 準備
 
-リポジトリのコピーを作って、Harness 要素を一時削除:
+リポジトリの**親ディレクトリ**でコピーを作って、Harness 要素を一時削除:
 
 ```bash
+cd ..   # clone 直後は sample-quarkus-app の中に居るので、親に戻る
 cp -r sample-quarkus-app sample-quarkus-app-no-harness
 cd sample-quarkus-app-no-harness
 rm AGENTS.md CLAUDE.md

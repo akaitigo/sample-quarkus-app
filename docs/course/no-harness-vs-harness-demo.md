@@ -50,6 +50,7 @@ PostToolUse Hook (`post-tool-use-format.sh`) は **ktlint が入っていれば*
 
 ```bash
 brew install ktlint   # macOS。未導入だと formatted 演出は出ない（skip ログになる）
+brew install jq       # ★必須。jq が無いと両 Hook が冒頭で exit 0 し、[Harness] ログ・BLOCKED が一切出ず Hook デモが完全に無音になる
 ```
 
 > 受講者の大半は ktlint 未導入で skip ログになる。これは想定どおりで「format Hook の有効化は Phase 4」と口頭補足する。Hook 自体が走っていること（[Harness] 行が出ること）は ktlint 有無に関わらず見せられる。
@@ -252,6 +253,11 @@ claude
 - もし 400 が出たら: AI が提供済み DTO を使わず**自分で素の単一プロパティ DTO を新規作成**した可能性。提供済みの `PriceUpdateRequest` を使うよう促す。
 - 詳細: `docs/ai/architecture.md`「既知の落とし穴」。
 
+### Hook の `[Harness]` ログ・BLOCKED が全く出ない
+
+- まず **`command -v jq`** を確認。**jq が無いと両 Hook が冒頭で `exit 0` し完全に無音**になる（format も保護も効かない）→ `brew install jq`（準備3 参照）
+- cwd が `sample-quarkus-app/` 直下か（Hook は相対パス `.claude/hooks/...` を叩く）
+
 ### Round 2 で Hook が遅くてデモが止まる
 
 - 事前に `post-tool-use-format.sh` が高速 (1 秒以内) であることを確認
@@ -285,7 +291,7 @@ claude
 - **A**: 「Phase 4 から。Phase 1〜3 (AGENTS.md / docs/ai / Skill) だけでも効果は出る」
 
 - **Q**: 「他の AI (Cursor / Aider) でも効く?」
-- **A**: 「AGENTS.md は **ベンダー中立のオープン標準**（Codex / Cursor / Amp / Google Jules 等が採用、仕様は `openai/agents.md`、Linux Foundation 配下で運営）。Claude Code も読む。Cursor は `.cursorrules` も別途読む。各エージェントの読込ファイルに同じポインタを置けば移植できる」
+- **A**: 「AGENTS.md は **ベンダー中立のオープン標準**（Codex / Cursor / Amp / Google Jules 等が採用、仕様は `agentsmd/agents.md`、Linux Foundation 配下の Agentic AI Foundation が運営）。Claude Code も読む。Cursor は `.cursorrules` も別途読む。各エージェントの読込ファイルに同じポインタを置けば移植できる」
 
 - **Q**: 「ハーネスなしリポジトリは本当に削除した?」
 - **A**: 「コピーで作ったので、本物のリポジトリは無傷。**本物に手を入れるときは必ずコピーかブランチで**」

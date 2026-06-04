@@ -20,7 +20,7 @@
 ### 1. リポジトリ取得
 
 ```bash
-git clone <配布される URL>
+git clone https://github.com/akaitigo/sample-quarkus-app.git
 cd sample-quarkus-app
 ```
 
